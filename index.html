@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ky-Lin — Vote setlist</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1>Ky-Lin — Vote setlist</h1>
+    <p class="subtitle">Écoute un extrait de chaque chanson et choisis tes <strong>8 préférées</strong>, pas plus.</p>
+  </header>
+
+  <main>
+    <section class="name-section">
+      <label for="prenom">Ton prénom</label>
+      <input type="text" id="prenom" placeholder="Ton prénom" autocomplete="given-name">
+    </section>
+
+    <section class="counter-section" aria-live="polite">
+      <span id="counter">0</span> / 8 chansons sélectionnées
+    </section>
+
+    <ul id="song-list" class="song-list"></ul>
+
+    <section class="validate-section">
+      <button id="validate-btn" disabled>Valider mon vote</button>
+      <p id="validate-hint" class="hint">Renseigne ton prénom et choisis exactement 8 chansons.</p>
+    </section>
+
+    <section id="confirmation" class="confirmation hidden">
+      <h2>Merci <span id="confirm-name"></span> !</h2>
+      <p>Un nouvel onglet GitHub vient de s'ouvrir avec ton vote pré-rempli.</p>
+      <p><strong>Vérifie que la page s'est bien ouverte, puis clique sur "Submit new issue" pour l'envoyer.</strong></p>
+      <button id="reset-btn">Faire voter quelqu'un d'autre</button>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Ky-Lin © — site de vote interne</p>
+  </footer>
+
+  <script src="songs.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

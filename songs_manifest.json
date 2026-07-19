@@ -1,0 +1,260 @@
+[
+  {
+    "slug": "a-thousand-and-three-stars",
+    "title": "A Thousand And Three Stars",
+    "mp3": "audio/a-thousand-and-three-stars.mp3",
+    "wav": "audio/a-thousand-and-three-stars.wav"
+  },
+  {
+    "slug": "dust-of-the-world",
+    "title": "Dust Of The World",
+    "mp3": "audio/dust-of-the-world.mp3",
+    "wav": null
+  },
+  {
+    "slug": "over",
+    "title": "Over",
+    "mp3": "audio/over.mp3",
+    "wav": null
+  },
+  {
+    "slug": "poison",
+    "title": "Poison",
+    "mp3": "audio/poison.mp3",
+    "wav": null
+  },
+  {
+    "slug": "surrender",
+    "title": "Surrender",
+    "mp3": "audio/surrender.mp3",
+    "wav": null
+  },
+  {
+    "slug": "too-bad",
+    "title": "Too Bad (Bad)",
+    "mp3": "audio/too-bad.mp3",
+    "wav": null
+  },
+  {
+    "slug": "breath",
+    "title": "Breath",
+    "mp3": "audio/breath.mp3",
+    "wav": null
+  },
+  {
+    "slug": "balboa",
+    "title": "Balboa (On My Way)",
+    "mp3": "audio/balboa.mp3",
+    "wav": "audio/balboa.wav"
+  },
+  {
+    "slug": "burden",
+    "title": "Burden",
+    "mp3": "audio/burden.mp3",
+    "wav": null
+  },
+  {
+    "slug": "i-will-find",
+    "title": "I Will Find",
+    "mp3": "audio/i-will-find.mp3",
+    "wav": "audio/i-will-find.wav"
+  },
+  {
+    "slug": "in-the-eye",
+    "title": "In The Eye",
+    "mp3": "audio/in-the-eye.mp3",
+    "wav": null
+  },
+  {
+    "slug": "cheerless-box",
+    "title": "Cheerless Box",
+    "mp3": "audio/cheerless-box.mp3",
+    "wav": null
+  },
+  {
+    "slug": "twilight",
+    "title": "Twilight",
+    "mp3": "audio/twilight.mp3",
+    "wav": null
+  },
+  {
+    "slug": "snakes-house",
+    "title": "Snakes' House",
+    "mp3": "audio/snakes-house.mp3",
+    "wav": null
+  },
+  {
+    "slug": "these-boots",
+    "title": "These Boots Are Made For Walking",
+    "mp3": "audio/these-boots.mp3",
+    "wav": null
+  },
+  {
+    "slug": "selfish",
+    "title": "Selfish",
+    "mp3": "audio/selfish.mp3",
+    "wav": "audio/selfish.wav"
+  },
+  {
+    "slug": "realm-of-fancy",
+    "title": "The Realm Of Fancy",
+    "mp3": "audio/realm-of-fancy.mp3",
+    "wav": null
+  },
+  {
+    "slug": "lighthouse",
+    "title": "Lighthouse",
+    "mp3": "audio/lighthouse.mp3",
+    "wav": null
+  },
+  {
+    "slug": "used-branches-fall",
+    "title": "Used Branches Fall",
+    "mp3": "audio/used-branches-fall.mp3",
+    "wav": null
+  },
+  {
+    "slug": "eviction",
+    "title": "Eviction",
+    "mp3": "audio/eviction.mp3",
+    "wav": null
+  },
+  {
+    "slug": "breaking-the-glass",
+    "title": "Breaking The Glass",
+    "mp3": "audio/breaking-the-glass.mp3",
+    "wav": null
+  },
+  {
+    "slug": "its-you",
+    "title": "It's You (Own Failure)",
+    "mp3": "audio/its-you.mp3",
+    "wav": null
+  },
+  {
+    "slug": "dance-with-me",
+    "title": "Dance With Me",
+    "mp3": "audio/dance-with-me.mp3",
+    "wav": null
+  },
+  {
+    "slug": "welcome",
+    "title": "Welcome",
+    "mp3": "audio/welcome.mp3",
+    "wav": null
+  },
+  {
+    "slug": "too-late",
+    "title": "Too Late",
+    "mp3": "audio/too-late.mp3",
+    "wav": null
+  },
+  {
+    "slug": "sunset-love",
+    "title": "Sunset-Love",
+    "mp3": "audio/sunset-love.mp3",
+    "wav": null
+  },
+  {
+    "slug": "dont-pull-me-in",
+    "title": "Don't Pull Me In",
+    "mp3": "audio/dont-pull-me-in.mp3",
+    "wav": null
+  },
+  {
+    "slug": "say-my-name",
+    "title": "Say My Name",
+    "mp3": "audio/say-my-name.mp3",
+    "wav": null
+  },
+  {
+    "slug": "sun-that-turns-to-grey",
+    "title": "Sun That Turns To Grey",
+    "mp3": "audio/sun-that-turns-to-grey.mp3",
+    "wav": null
+  },
+  {
+    "slug": "walking-on-your-shoulders",
+    "title": "Walking On Your Shoulders",
+    "mp3": "audio/walking-on-your-shoulders.mp3",
+    "wav": null
+  },
+  {
+    "slug": "everytime",
+    "title": "Everytime",
+    "mp3": "audio/everytime.mp3",
+    "wav": null
+  },
+  {
+    "slug": "into-the-night",
+    "title": "Into The Night (Goodie)",
+    "mp3": "audio/into-the-night.mp3",
+    "wav": null
+  },
+  {
+    "slug": "dead-and-gone",
+    "title": "Dead And Gone",
+    "mp3": "audio/dead-and-gone.mp3",
+    "wav": "audio/dead-and-gone.wav"
+  },
+  {
+    "slug": "let-it-die",
+    "title": "Let It Die (Ternaire)",
+    "mp3": "audio/let-it-die.mp3",
+    "wav": "audio/let-it-die.wav"
+  },
+  {
+    "slug": "upside-down",
+    "title": "Upside Down (Enemies)",
+    "mp3": "audio/upside-down.mp3",
+    "wav": null
+  },
+  {
+    "slug": "hear-them-falling",
+    "title": "Hear Them Falling (Message)",
+    "mp3": "audio/hear-them-falling.mp3",
+    "wav": null
+  },
+  {
+    "slug": "the-ripper",
+    "title": "The Ripper (Trinaire / Triliaire)",
+    "mp3": "audio/the-ripper.mp3",
+    "wav": "audio/the-ripper.wav"
+  },
+  {
+    "slug": "modern-times",
+    "title": "Modern Times (Johnny Rules)",
+    "mp3": "audio/modern-times.mp3",
+    "wav": null
+  },
+  {
+    "slug": "from-the-shell",
+    "title": "From The Shell",
+    "mp3": "audio/from-the-shell.mp3",
+    "wav": null
+  },
+  {
+    "slug": "music",
+    "title": "Music",
+    "mp3": "audio/music.mp3",
+    "wav": null
+  },
+  {
+    "slug": "broken-past",
+    "title": "Broken Past",
+    "mp3": "audio/broken-past.mp3",
+    "wav": null
+  },
+  {
+    "slug": "gerald-chanson",
+    "title": "Gerald Chanson",
+    "mp3": "audio/gerald-chanson.mp3",
+    "wav": null
+  },
+  {
+    "slug": "yesterday",
+    "title": "Yesterday",
+    "mp3": null,
+    "wav": null
+  }
+]
