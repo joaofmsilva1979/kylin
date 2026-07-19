@@ -34,6 +34,19 @@ site_vote/
    soumettre l'Issue). S'il n'en a pas, il peut en créer un en 30 secondes sur
    github.com.
 
+### Attention aux fichiers .wav (limite GitHub 25 Mo)
+
+Certains `.wav` dans `audio/` dépassent 25 Mo (jusqu'à 60 Mo) — l'uploader web de
+GitHub ("Yowza, that's a big file...") les refuse. Un fichier `.gitignore` est déjà en
+place pour les exclure automatiquement : **ils n'ont pas besoin d'être sur GitHub**, le
+site n'utilise que les `.mp3` pour la lecture, et les `.wav` restent en sécurité ici,
+dans ce dossier Google Drive, pour l'archivage.
+
+Si tu pousses le dossier avec `git` (`git add . && git commit && git push`) plutôt
+qu'en glissant les fichiers sur github.com, le `.gitignore` s'applique automatiquement.
+Si tu utilises l'uploader web par glisser-déposer, il suffit de ne pas glisser le
+contenu de `audio/*.wav`.
+
 ## Consulter les votes
 
 Onglet **Issues** du repo GitHub → chaque Issue = un vote, avec le prénom en titre et
