@@ -10,6 +10,8 @@ const confirmNameEl = document.getElementById("confirm-name");
 const resetBtn = document.getElementById("reset-btn");
 const mainEl = document.querySelector("main");
 const waLinkEl = document.getElementById("wa-link");
+const emailLinkEl = document.getElementById("email-link");
+const NOTIFY_EMAIL = "joaofmsilva1979@gmail.com";
 const copyBtn = document.getElementById("copy-message-btn");
 const copyStatusEl = document.getElementById("copy-status");
 const confirmSuccessEl = document.getElementById("confirm-success");
@@ -163,6 +165,8 @@ validateBtn.addEventListener("click", async () => {
   validateBtn.textContent = "Valider mon vote";
 
   waLinkEl.href = `https://wa.me/?text=${encodeURIComponent(lastMessage)}`;
+  const emailSubject = `Ky-Lin — vote de ${prenom}`;
+  emailLinkEl.href = `mailto:${NOTIFY_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(lastMessage)}`;
   copyStatusEl.textContent = "";
   confirmSuccessEl.classList.toggle("hidden", !success);
   confirmFallbackEl.classList.toggle("hidden", success);

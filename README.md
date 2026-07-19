@@ -11,11 +11,17 @@ automatiquement et le classement en haut de la page se met à jour tout seul (to
 Un petit Google Sheet fait office de base de données, piloté par un script Google Apps
 Script qui expose deux fonctions :
 - le site **envoie** un vote → le script l'ajoute (ou remplace l'ancien vote de la même
-  personne) dans le Sheet
+  personne) dans le Sheet, **et envoie un e-mail automatique** à
+  `joaofmsilva1979@gmail.com` avec le détail du vote (aucune action requise du votant)
 - le site **lit** le classement → le script renvoie tous les votes en JSON
 
 Rien de tout ça n'est visible ni accessible aux votants — ils voient juste la page, ils
 votent, point.
+
+**Si le Sheet n'est pas encore configuré** (ou en cas de souci réseau), le site propose
+automatiquement un repli : boutons "Envoyer sur WhatsApp" et "Envoyer par e-mail" (ouvre
+l'appli mail du téléphone, pré-remplie, adressée à `joaofmsilva1979@gmail.com`) — dans ce
+cas la personne doit elle-même appuyer sur envoyer.
 
 ## Mise en route (une seule fois, ~5 minutes)
 

@@ -303,22 +303,37 @@ button:disabled {
 .confirmation h2 { margin-top: 0; }
 
 .confirmation button,
-.confirmation .wa-button {
+.confirmation .wa-button,
+.confirmation .email-button {
   margin-top: 1rem;
 }
 
-.wa-button {
+.wa-button,
+.email-button {
   display: inline-block;
   text-decoration: none;
   border-radius: 999px;
   padding: 0.8rem 2rem;
-  background: #25d366;
-  color: #06210f;
   font-weight: 700;
   transition: transform 0.1s ease;
 }
 
-.wa-button:hover { transform: translateY(-1px); }
+.wa-button {
+  background: #25d366;
+  color: #06210f;
+}
+
+.email-button {
+  margin-left: 0.6rem;
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.wa-button:hover,
+.email-button:hover {
+  transform: translateY(-1px);
+}
 
 #copy-message-btn {
   margin-left: 0.6rem;
