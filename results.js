@@ -1,13 +1,9 @@
-// Affiche, pour chaque chanson, des pastilles avec les initiales des votants.
-// Va lire les votes déjà soumis via l'API GitHub (Issues avec le label "vote").
-// Si une même personne a voté plusieurs fois (même prénom), seul son vote le
-// plus récent est compté — ça permet de changer d'avis en revotant.
+// Affiche le classement des chansons en lisant en direct le Google Sheet (via
+// l'API Apps Script). Le Top 10 est mis en valeur, le reste suit dans l'ordre.
+// Se rafraîchit automatiquement toutes les 20 secondes.
 
-const refreshBtn = document.getElementById("refresh-results-btn");
-const statusEl = document.getElementById("results-status");
-const leaderboardEl = document.getElementById("leaderboard");
-const leaderboardListEl = document.getElementById("leaderboard-list");
-const TOP_N = 12;
+const TOP_HIGHLIGHT = 10;
+const REFRESH_INTERVAL_MS = 20000;
 
 function initialsFor(name) {
   const s = name.trim();
@@ -24,29 +20,10 @@ function colorFor(name) {
   return `hsl(${hue}, 60%, 45%)`;
 }
 
-function parseIssue(issue) {
-  const titleMatch = issue.title.match(/—\s*(.+)$/);
-  const prenom = (titleMatch ? titleMatch[1] : issue.user?.login || "Anonyme").trim();
-
-  const songTitles = [];
-  const lines = (issue.body || "").split("\n");
-  for (const line of lines) {
-    const m = line.match(/^\s*\d+\.\s+(.+?)\s*$/);
-    if (m) songTitles.push(m[1].trim());
-  }
-
-  return { prenom, songTitles, createdAt: issue.created_at };
-}
-
-function latestVotePerPerson(issues) {
+function latestVotePerPerson(votes) {
   const byPerson = new Map();
-  issues.forEach((issue) => {
-    const parsed = parseIssue(issue);
-    const key = parsed.prenom.toLowerCase();
-    const existing = byPerson.get(key);
-    if (!existing || new Date(parsed.createdAt) > new Date(existing.createdAt)) {
-      byPerson.set(key, parsed);
-    }
+  votes.forEach((vote) => {
+    byPerson.set(vote.prenom.toLowerCase(), vote);
   });
   return Array.from(byPerson.values());
 }
@@ -54,7 +31,7 @@ function latestVotePerPerson(issues) {
 function buildTally(votes) {
   const tally = new Map();
   votes.forEach((vote) => {
-    vote.songTitles.forEach((title) => {
+    vote.songs.forEach((title) => {
       if (!tally.has(title)) tally.set(title, []);
       tally.get(title).push(vote.prenom);
     });
@@ -92,13 +69,14 @@ function renderTally(tally) {
   });
 }
 
-function renderLeaderboard(tally) {
+function renderLeaderboard(tally, participantCount) {
+  const leaderboardListEl = document.getElementById("leaderboard-list");
+  const leaderboardEl = document.getElementById("leaderboard");
   leaderboardListEl.innerHTML = "";
 
   const ranked = Array.from(tally.entries())
     .map(([title, voters]) => ({ title, voters }))
-    .sort((a, b) => b.voters.length - a.voters.length)
-    .slice(0, TOP_N);
+    .sort((a, b) => b.voters.length - a.voters.length);
 
   if (ranked.length === 0) {
     leaderboardEl.classList.add("hidden");
@@ -107,8 +85,14 @@ function renderLeaderboard(tally) {
 
   leaderboardEl.classList.remove("hidden");
 
-  ranked.forEach(({ title, voters }) => {
+  ranked.forEach(({ title, voters }, index) => {
     const li = document.createElement("li");
+    if (index < TOP_HIGHLIGHT) li.classList.add("leaderboard-top");
+
+    const rank = document.createElement("span");
+    rank.className = "leaderboard-rank";
+    rank.textContent = `${index + 1}`;
+    li.appendChild(rank);
 
     const titleSpan = document.createElement("span");
     titleSpan.className = "leaderboard-title";
@@ -134,48 +118,47 @@ function renderLeaderboard(tally) {
 
     li.appendChild(badges);
     leaderboardListEl.appendChild(li);
+
+    if (index === TOP_HIGHLIGHT - 1 && ranked.length > TOP_HIGHLIGHT) {
+      const divider = document.createElement("li");
+      divider.className = "leaderboard-divider";
+      divider.textContent = "— le reste, dans l'ordre —";
+      leaderboardListEl.appendChild(divider);
+    }
   });
+
+  const statusEl = document.getElementById("results-status");
+  statusEl.textContent = `${participantCount} participant${participantCount > 1 ? "s" : ""} pris en compte.`;
+}
+
+async function fetchVotes() {
+  if (!SHEET_API_URL || SHEET_API_URL.includes("COLLE-TON-URL")) {
+    document.getElementById("results-status").textContent =
+      "Classement pas encore branché (sheet-config.js à configurer).";
+    return null;
+  }
+  try {
+    const res = await fetch(SHEET_API_URL);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return await res.json();
+  } catch (err) {
+    document.getElementById("results-status").textContent =
+      "Impossible de charger le classement pour l'instant.";
+    return null;
+  }
 }
 
 async function loadResults() {
-  if (!GITHUB_REPO || GITHUB_REPO.includes("TON-COMPTE")) {
-    statusEl.textContent = "Repo GitHub non configuré (config.js) — impossible de charger les votes.";
-    leaderboardEl.classList.add("hidden");
+  const rawVotes = await fetchVotes();
+  if (!rawVotes) {
+    document.getElementById("leaderboard").classList.add("hidden");
     return;
   }
-
-  statusEl.textContent = "Chargement des votes...";
-  refreshBtn.disabled = true;
-
-  try {
-    const url = `https://api.github.com/repos/${GITHUB_REPO}/issues?labels=vote&state=all&per_page=100`;
-    const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
-
-    if (!res.ok) {
-      if (res.status === 403) {
-        statusEl.textContent = "Limite de requêtes GitHub atteinte, réessaie dans quelques minutes.";
-      } else if (res.status === 404) {
-        statusEl.textContent = "Repo introuvable ou privé — les votes doivent être publics pour s'afficher ici.";
-      } else {
-        statusEl.textContent = `Erreur (${res.status}) en chargeant les votes.`;
-      }
-      return;
-    }
-
-    const issues = await res.json();
-    const votes = latestVotePerPerson(issues);
-    const tally = buildTally(votes);
-    renderTally(tally);
-    renderLeaderboard(tally);
-
-    statusEl.textContent = `${votes.length} vote${votes.length > 1 ? "s" : ""} pris en compte.`;
-  } catch (err) {
-    statusEl.textContent = "Impossible de charger les votes (connexion ?).";
-  } finally {
-    refreshBtn.disabled = false;
-  }
+  const votes = latestVotePerPerson(rawVotes);
+  const tally = buildTally(votes);
+  renderTally(tally);
+  renderLeaderboard(tally, votes.length);
 }
 
-refreshBtn.addEventListener("click", loadResults);
-
 loadResults();
+setInterval(loadResults, REFRESH_INTERVAL_MS);

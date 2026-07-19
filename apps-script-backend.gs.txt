@@ -1,0 +1,66 @@
+// === Code à coller dans l'éditeur Apps Script (voir README.md pour les étapes) ===
+// Ce script transforme un Google Sheet en petite API : le site y enregistre les
+// votes (doPost) et y lit le classement (doGet). Aucune donnée sensible, aucun
+// compte requis pour les votants.
+
+const SHEET_NAME = "Votes";
+
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    sheet.appendRow(["Timestamp", "Prenom", "Songs"]);
+  }
+  return sheet;
+}
+
+function doGet(e) {
+  const sheet = getSheet_();
+  const data = sheet.getDataRange().getValues();
+  const rows = data.slice(1); // ignore l'en-tête
+  const votes = rows
+    .filter((r) => r[1])
+    .map((r) => ({
+      timestamp: r[0],
+      prenom: r[1],
+      songs: JSON.parse(r[2]),
+    }));
+  return ContentService.createTextOutput(JSON.stringify(votes)).setMimeType(
+    ContentService.MimeType.JSON
+  );
+}
+
+function doPost(e) {
+  const body = JSON.parse(e.postData.contents);
+  const prenom = String(body.prenom || "").trim();
+  const songs = body.songs || [];
+
+  if (!prenom || !Array.isArray(songs) || songs.length === 0) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, error: "prenom ou songs manquant" })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  const sheet = getSheet_();
+  const data = sheet.getDataRange().getValues();
+
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][1]).toLowerCase() === prenom.toLowerCase()) {
+      rowIndex = i + 1; // les lignes du Sheet sont indexées à partir de 1
+      break;
+    }
+  }
+
+  const rowData = [new Date(), prenom, JSON.stringify(songs)];
+  if (rowIndex > 0) {
+    sheet.getRange(rowIndex, 1, 1, 3).setValues([rowData]);
+  } else {
+    sheet.appendRow(rowData);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(
+    ContentService.MimeType.JSON
+  );
+}

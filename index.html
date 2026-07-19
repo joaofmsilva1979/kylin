@@ -9,14 +9,14 @@
 <body>
   <header class="page-header">
     <h1>Ky-Lin — Vote setlist</h1>
-    <p class="subtitle">Écoute un extrait de chaque chanson et choisis tes <strong>8 préférées</strong>, pas plus.</p>
+    <p class="subtitle">Écoute un extrait de chaque chanson et choisis tes <strong>10 préférées</strong>, pas plus.</p>
   </header>
 
   <main>
     <section class="name-section">
-      <label for="prenom">Ton prénom</label>
+      <label for="prenom">🕵️ Qui es-tu, spécimen ?</label>
       <select id="prenom">
-        <option value="">-- Choisis ton prénom --</option>
+        <option value="">-- 🕵️ Qui es-tu, spécimen ? --</option>
         <option value="Nicolas">Nicolas</option>
         <option value="Dany">Dany</option>
         <option value="João">João</option>
@@ -26,16 +26,12 @@
     </section>
 
     <section class="counter-section" aria-live="polite">
-      <span id="counter">0</span> / 8 chansons sélectionnées
-    </section>
-
-    <section class="results-bar">
-      <button id="refresh-results-btn" type="button">Rafraîchir les votes</button>
-      <span id="results-status" class="results-status"></span>
+      <span id="counter">0</span> / 10 chansons sélectionnées
     </section>
 
     <section id="leaderboard" class="leaderboard hidden">
-      <h2>Top 12 actuel</h2>
+      <h2>Classement actuel</h2>
+      <p id="results-status" class="results-status"></p>
       <ol id="leaderboard-list"></ol>
     </section>
 
@@ -43,13 +39,24 @@
 
     <section class="validate-section">
       <button id="validate-btn" disabled>Valider mon vote</button>
-      <p id="validate-hint" class="hint">Renseigne ton prénom et choisis exactement 8 chansons.</p>
+      <p id="validate-hint" class="hint">Dis qui tu es et choisis exactement 10 chansons.</p>
     </section>
 
     <section id="confirmation" class="confirmation hidden">
       <h2>Merci <span id="confirm-name"></span> !</h2>
-      <p>Un nouvel onglet GitHub vient de s'ouvrir avec ton vote pré-rempli.</p>
-      <p><strong>Vérifie que la page s'est bien ouverte, puis clique sur "Submit new issue" pour l'envoyer.</strong></p>
+
+      <div id="confirm-success" class="hidden">
+        <p>🎉 Ton vote est enregistré, le classement va se mettre à jour tout seul.</p>
+      </div>
+
+      <div id="confirm-fallback" class="hidden">
+        <p>Le vote n'a pas pu être enregistré automatiquement pour l'instant.</p>
+        <p><strong>Envoie-le comme ça, pour qu'on l'ajoute à la main :</strong></p>
+        <a id="wa-link" class="wa-button" href="#" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>
+        <button id="copy-message-btn" type="button">Copier le message</button>
+        <p id="copy-status" class="hint"></p>
+      </div>
+
       <button id="reset-btn">Faire voter quelqu'un d'autre</button>
     </section>
   </main>
@@ -59,7 +66,7 @@
   </footer>
 
   <script src="songs.js"></script>
-  <script src="config.js"></script>
+  <script src="sheet-config.js"></script>
   <script src="app.js"></script>
   <script src="results.js"></script>
 </body>
