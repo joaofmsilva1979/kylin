@@ -34,7 +34,7 @@ const SONGS = [
   { slug: "upside-down", title: "Upside Down (Enemies)" },
   { slug: "hear-them-falling", title: "Hear Them Falling (Message)" },
   { slug: "the-ripper", title: "The Ripper (Trinaire / Triliaire)", dualVersion: true, oldFile: "the-ripper-old.mp3" },
-  { slug: "modern-times", title: "Modern Times (Johnny Rules)" },
+  { slug: "modern-times", title: "Modern Times (Johnny Rules)", dualVersion: true, oldFile: "modern-times-johnnyrules.mp3" },
   { slug: "gerald-chanson", title: "Gerald Chanson" },
   { slug: "yesterday", title: "Yesterday" },
 ];
