@@ -5,6 +5,9 @@
 
 const refreshBtn = document.getElementById("refresh-results-btn");
 const statusEl = document.getElementById("results-status");
+const leaderboardEl = document.getElementById("leaderboard");
+const leaderboardListEl = document.getElementById("leaderboard-list");
+const TOP_N = 12;
 
 function initialsFor(name) {
   const s = name.trim();
@@ -89,9 +92,55 @@ function renderTally(tally) {
   });
 }
 
+function renderLeaderboard(tally) {
+  leaderboardListEl.innerHTML = "";
+
+  const ranked = Array.from(tally.entries())
+    .map(([title, voters]) => ({ title, voters }))
+    .sort((a, b) => b.voters.length - a.voters.length)
+    .slice(0, TOP_N);
+
+  if (ranked.length === 0) {
+    leaderboardEl.classList.add("hidden");
+    return;
+  }
+
+  leaderboardEl.classList.remove("hidden");
+
+  ranked.forEach(({ title, voters }) => {
+    const li = document.createElement("li");
+
+    const titleSpan = document.createElement("span");
+    titleSpan.className = "leaderboard-title";
+    titleSpan.textContent = title;
+    li.appendChild(titleSpan);
+
+    const badges = document.createElement("span");
+    badges.className = "vote-badges";
+
+    const count = document.createElement("span");
+    count.className = "vote-count";
+    count.textContent = `${voters.length} vote${voters.length > 1 ? "s" : ""}`;
+    badges.appendChild(count);
+
+    voters.forEach((prenom) => {
+      const badge = document.createElement("span");
+      badge.className = "vote-badge";
+      badge.textContent = initialsFor(prenom);
+      badge.title = prenom;
+      badge.style.backgroundColor = colorFor(prenom);
+      badges.appendChild(badge);
+    });
+
+    li.appendChild(badges);
+    leaderboardListEl.appendChild(li);
+  });
+}
+
 async function loadResults() {
   if (!GITHUB_REPO || GITHUB_REPO.includes("TON-COMPTE")) {
     statusEl.textContent = "Repo GitHub non configuré (config.js) — impossible de charger les votes.";
+    leaderboardEl.classList.add("hidden");
     return;
   }
 
@@ -117,6 +166,7 @@ async function loadResults() {
     const votes = latestVotePerPerson(issues);
     const tally = buildTally(votes);
     renderTally(tally);
+    renderLeaderboard(tally);
 
     statusEl.textContent = `${votes.length} vote${votes.length > 1 ? "s" : ""} pris en compte.`;
   } catch (err) {
