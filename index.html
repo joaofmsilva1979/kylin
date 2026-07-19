@@ -15,11 +15,23 @@
   <main>
     <section class="name-section">
       <label for="prenom">Ton prénom</label>
-      <input type="text" id="prenom" placeholder="Ton prénom" autocomplete="given-name">
+      <select id="prenom">
+        <option value="">-- Choisis ton prénom --</option>
+        <option value="Nicolas">Nicolas</option>
+        <option value="Dany">Dany</option>
+        <option value="João">João</option>
+        <option value="David">David</option>
+        <option value="Gérald">Gérald</option>
+      </select>
     </section>
 
     <section class="counter-section" aria-live="polite">
       <span id="counter">0</span> / 8 chansons sélectionnées
+    </section>
+
+    <section class="results-bar">
+      <button id="refresh-results-btn" type="button">Rafraîchir les votes</button>
+      <span id="results-status" class="results-status"></span>
     </section>
 
     <ul id="song-list" class="song-list"></ul>
@@ -44,5 +56,6 @@
   <script src="songs.js"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
+  <script src="results.js"></script>
 </body>
 </html>

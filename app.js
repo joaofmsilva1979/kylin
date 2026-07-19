@@ -15,6 +15,7 @@ function renderSongs() {
   SONGS.forEach((song) => {
     const li = document.createElement("li");
     li.className = "song-row";
+    li.dataset.songTitle = song.title;
 
     const label = document.createElement("label");
     label.className = "song-label";
@@ -57,6 +58,11 @@ function renderSongs() {
       li.appendChild(audio);
     }
 
+    const badges = document.createElement("div");
+    badges.className = "vote-badges";
+    badges.dataset.songTitle = song.title;
+    li.appendChild(badges);
+
     listEl.appendChild(li);
   });
 }
@@ -95,7 +101,7 @@ function updateValidateState() {
   }
 }
 
-prenomEl.addEventListener("input", updateValidateState);
+prenomEl.addEventListener("change", updateValidateState);
 
 validateBtn.addEventListener("click", () => {
   const prenom = prenomEl.value.trim();

@@ -68,7 +68,7 @@ main {
   color: var(--text-dim);
 }
 
-.name-section input {
+.name-section select {
   padding: 0.7rem 0.85rem;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -90,6 +90,56 @@ main {
 }
 
 #counter { color: var(--accent); }
+
+.results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.results-bar button {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.85rem;
+}
+
+.results-status {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.vote-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.vote-badges:empty {
+  display: none;
+}
+
+.vote-count {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-right: 0.15rem;
+}
+
+.vote-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: default;
+}
 
 .song-list {
   list-style: none;
