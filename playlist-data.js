@@ -11,7 +11,7 @@ const TIERS = {
 
 const PLAYLIST = [
   { slug: "a-thousand-and-three-stars", title: "A Thousand And Three Stars", tier: "unanime", dualVersion: true, oldFile: "a-thousand-and-three-stars-old.mp3" },
-  { slug: "dust-of-the-world", title: "Dust Of The World", tier: "unanime" },
+  { slug: "dust-of-the-world", title: "Dust Of The World", tier: "unanime", dualVersion: true, oldFile: "dust-of-the-world-old.mp3" },
   { slug: "too-bad", title: "Too Bad (Bad)", tier: "unanime", dualVersion: true, oldFile: "too-bad-old.mp3" },
   { slug: "everytime", title: "Everytime", tier: "unanime" },
   { slug: "breath", title: "Breath", tier: "quasi", dualVersion: true, oldFile: "breath-old.mp3" },

@@ -6,7 +6,7 @@
 // ancienne version = audio/<oldFile>)
 const SONGS = [
   { slug: "a-thousand-and-three-stars", title: "A Thousand And Three Stars", dualVersion: true, oldFile: "a-thousand-and-three-stars-old.mp3" },
-  { slug: "dust-of-the-world", title: "Dust Of The World" },
+  { slug: "dust-of-the-world", title: "Dust Of The World", dualVersion: true, oldFile: "dust-of-the-world-old.mp3" },
   { slug: "over", title: "Over" },
   { slug: "poison", title: "Poison" },
   { slug: "surrender", title: "Surrender" },
