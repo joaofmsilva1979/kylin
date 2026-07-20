@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ky-Lin — Setlist finale</title>
+<link rel="stylesheet" href="playlist.css">
+</head>
+<body>
+  <header class="pl-header">
+    <p class="pl-kicker">🎸 Ky-Lin</p>
+    <h1>Setlist finale</h1>
+    <p class="pl-subtitle">14 titres choisis par tout le groupe — merci David, Nicolas, Gérald, João &amp; Dany !</p>
+    <button id="play-all-btn" class="pl-play-all">▶ Tout écouter</button>
+  </header>
+
+  <main id="track-list" class="pl-track-list"></main>
+
+  <div id="now-playing-bar" class="pl-now-playing hidden">
+    <span class="pl-now-playing-label">En cours :</span>
+    <span id="now-playing-title"></span>
+    <button id="stop-btn" class="pl-stop-btn" type="button">■ Stop</button>
+  </div>
+
+  <footer class="pl-footer">
+    <a href="index.html">← Retour au site de vote</a>
+  </footer>
+
+  <script src="playlist-data.js"></script>
+  <script src="playlist.js"></script>
+</body>
+</html>
