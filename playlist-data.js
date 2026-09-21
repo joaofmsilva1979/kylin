@@ -1,19 +1,20 @@
-// Setlist finale — 14 titres retenus par le vote de tout le groupe.
+// Setlist finale — 15 titres retenus par le vote de tout le groupe.
 // tier: catégorie d'accueil (reprend le message envoyé au groupe)
 // dualVersion/oldFile: reprend les infos de songs.js pour les titres qui ont
 // une ancienne et une nouvelle version (IA).
 const TIERS = {
-  unanime: { label: "Unanimes (5/5)", emoji: "🔥" },
-  quasi: { label: "Quasi-unanimes (4/5)", emoji: "⭐" },
+  top5: { label: "Incontournables", emoji: "⭐" },
+  quasi: { label: "Quasi-unanimes (4/5)", emoji: "🔥" },
   bien: { label: "Bien accueillies (3/5)", emoji: "👍" },
   retenue: { label: "Retenues (2/5)", emoji: "✅" },
 };
 
 const PLAYLIST = [
-  { slug: "a-thousand-and-three-stars", title: "A Thousand And Three Stars", tier: "unanime", dualVersion: true, oldFile: "a-thousand-and-three-stars-old.mp3" },
-  { slug: "dust-of-the-world", title: "Dust Of The World", tier: "unanime", dualVersion: true, oldFile: "dust-of-the-world-old.mp3" },
-  { slug: "too-bad", title: "Too Bad (Bad)", tier: "unanime", dualVersion: true, oldFile: "too-bad-old.mp3" },
-  { slug: "everytime", title: "Everytime", tier: "unanime" },
+  { slug: "a-thousand-and-three-stars", title: "A Thousand And Three Stars", tier: "top5", dualVersion: true, oldFile: "a-thousand-and-three-stars-old.mp3" },
+  { slug: "too-bad", title: "Too Bad (Bad)", tier: "top5", dualVersion: true, oldFile: "too-bad-old.mp3" },
+  { slug: "everytime", title: "Everytime", tier: "top5" },
+  { slug: "dust-of-the-world", title: "Dust Of The World", tier: "top5", dualVersion: true, oldFile: "dust-of-the-world-old.mp3" },
+  { slug: "savage", title: "Savage", tier: "top5" },
   { slug: "breath", title: "Breath", tier: "quasi", dualVersion: true, oldFile: "breath-old.mp3" },
   { slug: "the-ripper", title: "The Ripper (Trinaire / Triliaire)", tier: "quasi", dualVersion: true, oldFile: "the-ripper-old.mp3" },
   { slug: "into-the-night", title: "Into The Night (Goodie)", tier: "bien" },
