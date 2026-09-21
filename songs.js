@@ -27,7 +27,7 @@ const SONGS = [
   { slug: "used-branches-fall", title: "Used Branches Fall" },
   { slug: "eviction", title: "Eviction" },
   { slug: "breaking-the-glass", title: "Breaking The Glass" },
-  { slug: "its-you", title: "It's You (Own Failure)", dualVersion: true, oldFile: "its-you-old.mp3" },
+  { slug: "its-you", title: "It’s You (Own Failure)", dualVersion: true, oldFile: "its-you-old.mp3" },
   { slug: "everytime", title: "Everytime" },
   { slug: "into-the-night", title: "Into The Night (Goodie)" },
   { slug: "let-it-die", title: "Let It Die (Ternaire)", dualVersion: true, oldFile: "let-it-die-old.mp3" },
@@ -37,4 +37,5 @@ const SONGS = [
   { slug: "modern-times", title: "Modern Times (Johnny Rules)", dualVersion: true, oldFile: "modern-times-johnnyrules.mp3" },
   { slug: "gerald-chanson", title: "Gerald Chanson" },
   { slug: "yesterday", title: "Yesterday" },
+  { slug: "savage", title: "Savage" },
 ];
