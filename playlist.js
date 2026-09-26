@@ -20,62 +20,70 @@ function pitchLabel(semitones) {
 
 function stopAllPitch() {
   if (_pitchAudio) {
-    _pitchAudio.pause();
-    _pitchAudio._btn.textContent = _pitchAudio._label;
-    if (_pitchAudio._keyBadge) _pitchAudio._keyBadge.textContent = _pitchAudio._origKeyText;
+    var a = _pitchAudio;
     _pitchAudio = null;
+    a._audio.pause();
+    a._btn.textContent = a._label;
+    if (a._keyBadge) a._keyBadge.textContent = a._origKeyText;
+    a._wrapper.classList.add("hidden");
   }
 }
 
 function createPitchBtn(track, index, keyBadge) {
   var label = pitchLabel(track.pitchShift);
-  var shiftedSrc = "audio/" + track.slug + "-shifted.mp3";
   var origKeyText = keyBadge ? keyBadge.textContent : null;
   var shiftedKeyText = (keyBadge && track.key)
     ? "\uD83C\uDFB5 " + (transposeKey(track.key, track.pitchShift) || track.key)
     : null;
+
+  // Lecteur audio shifté — caché par défaut
+  var result = createPlayer("audio/" + track.slug + "-shifted.mp3", null);
+  var shiftedWrapper = result.wrapper;
+  var shiftedAudio = result.audio;
+  shiftedWrapper.classList.add("hidden", "pl-shifted-player");
 
   var btn = document.createElement("button");
   btn.className = "pl-pitch-btn";
   btn.textContent = label;
 
   btn.addEventListener("click", function() {
+    // Déjà actif → stop
     if (_pitchAudio && _pitchAudio._index === index) {
       stopAllPitch();
       return;
     }
 
     stopAllPitch();
-    pauseAllExcept(null);
+    pauseAllExcept(shiftedAudio);
     if (sequenceActive) stopSequence();
 
     if (keyBadge && shiftedKeyText) keyBadge.textContent = shiftedKeyText;
 
-    var audio = new Audio(shiftedSrc);
-    audio._btn = btn;
-    audio._label = label;
-    audio._index = index;
-    audio._keyBadge = keyBadge;
-    audio._origKeyText = origKeyText;
-    _pitchAudio = audio;
+    shiftedWrapper.classList.remove("hidden");
+    shiftedAudio.play();
+
+    _pitchAudio = {
+      _audio: shiftedAudio,
+      _wrapper: shiftedWrapper,
+      _btn: btn,
+      _label: label,
+      _index: index,
+      _keyBadge: keyBadge,
+      _origKeyText: origKeyText,
+    };
 
     btn.textContent = "\u23F9 Stop";
-    allAudioEls.push(audio);
 
-    audio.addEventListener("ended", function() {
-      if (_pitchAudio === audio) {
-        btn.textContent = label;
-        if (keyBadge) keyBadge.textContent = origKeyText;
-        _pitchAudio = null;
-      }
-      var i = allAudioEls.indexOf(audio);
-      if (i !== -1) allAudioEls.splice(i, 1);
+    shiftedAudio.addEventListener("ended", function onEnded() {
+      if (_pitchAudio && _pitchAudio._audio === shiftedAudio) stopAllPitch();
+      shiftedAudio.removeEventListener("ended", onEnded);
     });
-
-    audio.play();
   });
 
-  return btn;
+  // Si l'utilisateur met pause via le lecteur natif sans passer par le bouton,
+  // on laisse faire — le bouton reste en mode Stop pour qu'il puisse reprendre.
+
+  return { btn: btn, wrapper: shiftedWrapper };
 }
 // --- Fin pitch shift ---
 
@@ -200,7 +208,9 @@ function renderTrack(track, index) {
   }
 
   if (track.pitchShift) {
-    info.appendChild(createPitchBtn(track, index, keyBadge));
+    var pitch = createPitchBtn(track, index, keyBadge);
+    info.appendChild(pitch.wrapper);
+    info.appendChild(pitch.btn);
   }
 
   card.appendChild(number);
