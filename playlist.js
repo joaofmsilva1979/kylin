@@ -72,19 +72,6 @@ function createPitchBtn(track, index) {
 // --- Fin pitch shift ---
 
 // --- Tonalité + BPM (affichage seul) ---
-var CHROMATIC = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-var ENHARMONIC = { Db: "C#", Eb: "D#", Fb: "E", Gb: "F#", Ab: "G#", Bb: "A#", Cb: "B" };
-
-function transposeKey(key, semitones) {
-  if (!key || !semitones) return null;
-  var isMinor = key.endsWith("m");
-  var root = isMinor ? key.slice(0, -1) : key;
-  var normalized = ENHARMONIC[root] || root;
-  var idx = CHROMATIC.indexOf(normalized);
-  if (idx === -1) return null;
-  return CHROMATIC[((idx + semitones) % 12 + 12) % 12] + (isMinor ? "m" : "");
-}
-
 function createMetaRow(track) {
   var row = document.createElement("div");
   row.className = "pl-track-meta";
@@ -92,8 +79,7 @@ function createMetaRow(track) {
   if (track.key) {
     var kb = document.createElement("span");
     kb.className = "pl-meta-badge";
-    var shifted = transposeKey(track.key, track.pitchShift || 0);
-    kb.textContent = "\uD83C\uDFB5 " + track.key + (shifted ? " \u2192 " + shifted : "");
+    kb.textContent = "\uD83C\uDFB5 " + track.key;
     row.appendChild(kb);
   }
 
