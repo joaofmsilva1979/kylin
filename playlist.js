@@ -36,11 +36,18 @@ function createPitchBtn(track, index, keyBadge) {
     ? "\uD83C\uDFB5 " + (transposeKey(track.key, track.pitchShift) || track.key)
     : null;
 
-  // Lecteur audio shifté — caché par défaut
-  var result = createPlayer("audio/" + track.slug + "-shifted.mp3", null);
-  var shiftedWrapper = result.wrapper;
-  var shiftedAudio = result.audio;
-  shiftedWrapper.classList.add("hidden", "pl-shifted-player");
+  // Lecteur audio shifté — créé manuellement (pas via createPlayer)
+  // pour éviter que son propre event 'play' appelle stopAllPitch()
+  var shiftedWrapper = document.createElement("div");
+  shiftedWrapper.className = "pl-audio-wrapper hidden pl-shifted-player";
+  var shiftedAudio = document.createElement("audio");
+  shiftedAudio.controls = true;
+  shiftedAudio.preload = "none";
+  shiftedAudio.src = "audio/" + track.slug + "-shifted.mp3";
+  shiftedWrapper.appendChild(shiftedAudio);
+  allAudioEls.push(shiftedAudio);
+  // Quand l'utilisateur appuie play manuellement sur le lecteur natif
+  shiftedAudio.addEventListener("play", function() { pauseAllExcept(shiftedAudio); });
 
   var btn = document.createElement("button");
   btn.className = "pl-pitch-btn";
