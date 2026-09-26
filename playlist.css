@@ -240,27 +240,6 @@ main.pl-track-list {
   padding: 0.15rem 0.6rem;
 }
 
-.pl-meta-editable {
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.pl-meta-editable:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.pl-meta-input {
-  font: inherit;
-  font-size: 0.72rem;
-  color: var(--text);
-  background: var(--surface-alt);
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  padding: 0.15rem 0.6rem;
-  outline: none;
-  width: 6rem;
-}
 
 /* Bouton pitch shift */
 .pl-pitch-btn {

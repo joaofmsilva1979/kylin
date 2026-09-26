@@ -71,7 +71,7 @@ function createPitchBtn(track, index) {
 }
 // --- Fin pitch shift ---
 
-// --- Transposition de tonalité ---
+// --- Tonalité + BPM (affichage seul) ---
 var CHROMATIC = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 var ENHARMONIC = { Db: "C#", Eb: "D#", Fb: "E", Gb: "F#", Ab: "G#", Bb: "A#", Cb: "B" };
 
@@ -82,93 +82,31 @@ function transposeKey(key, semitones) {
   var normalized = ENHARMONIC[root] || root;
   var idx = CHROMATIC.indexOf(normalized);
   if (idx === -1) return null;
-  var newIdx = ((idx + semitones) % 12 + 12) % 12;
-  return CHROMATIC[newIdx] + (isMinor ? "m" : "");
-}
-// --- Fin transposition ---
-
-// --- BPM / Tonalité — localStorage ---
-var STORAGE_KEY = "kylin-meta";
-
-function getLocalMeta(slug) {
-  try {
-    var all = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    return all[slug] || {};
-  } catch (e) { return {}; }
+  return CHROMATIC[((idx + semitones) % 12 + 12) % 12] + (isMinor ? "m" : "");
 }
 
-function saveLocalMeta(slug, field, value) {
-  try {
-    var all = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    if (!all[slug]) all[slug] = {};
-    if (value === null || value === "") {
-      delete all[slug][field];
-    } else {
-      all[slug][field] = value;
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
-  } catch (e) {}
-}
+function createMetaRow(track) {
+  var row = document.createElement("div");
+  row.className = "pl-track-meta";
 
-function makeBadgeText(field, value, pitchShift) {
-  if (field === "key") {
-    if (!value) return "\uD83C\uDFB5 tonalité";
-    var transposed = transposeKey(value, pitchShift);
-    return transposed
-      ? "\uD83C\uDFB5 " + value + " \u2192 " + transposed
-      : "\uD83C\uDFB5 " + value;
-  }
-  return value ? value + " BPM" : "BPM";
-}
-
-function editMeta(badge, slug, field, pitchShift) {
-  var savedVal = getLocalMeta(slug)[field] || "";
-  var input = document.createElement("input");
-  input.className = "pl-meta-input";
-  input.type = field === "bpm" ? "number" : "text";
-  input.value = savedVal;
-  input.placeholder = field === "bpm" ? "ex: 120" : "ex: Am";
-
-  badge.replaceWith(input);
-  input.focus();
-  input.select();
-
-  function commit() {
-    var val = input.value.trim();
-    saveLocalMeta(slug, field, val || null);
-    var newBadge = document.createElement("span");
-    newBadge.className = badge.className;
-    newBadge.title = "Cliquer pour modifier";
-    newBadge.textContent = makeBadgeText(field, val || null, pitchShift);
-    newBadge.addEventListener("click", function() { editMeta(newBadge, slug, field, pitchShift); });
-    input.replaceWith(newBadge);
+  if (track.key) {
+    var kb = document.createElement("span");
+    kb.className = "pl-meta-badge";
+    var shifted = transposeKey(track.key, track.pitchShift || 0);
+    kb.textContent = "\uD83C\uDFB5 " + track.key + (shifted ? " \u2192 " + shifted : "");
+    row.appendChild(kb);
   }
 
-  function cancel() {
-    var newBadge = document.createElement("span");
-    newBadge.className = badge.className;
-    newBadge.title = "Cliquer pour modifier";
-    newBadge.textContent = badge.textContent;
-    newBadge.addEventListener("click", function() { editMeta(newBadge, slug, field, pitchShift); });
-    input.replaceWith(newBadge);
+  if (track.bpm) {
+    var bb = document.createElement("span");
+    bb.className = "pl-meta-badge";
+    bb.textContent = track.bpm + " BPM";
+    row.appendChild(bb);
   }
 
-  input.addEventListener("blur", commit);
-  input.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") { input.blur(); }
-    if (e.key === "Escape") { input.removeEventListener("blur", commit); cancel(); }
-  });
+  return row.children.length ? row : null;
 }
-
-function createMetaBadge(slug, field, initialValue, pitchShift) {
-  var badge = document.createElement("span");
-  badge.className = "pl-meta-badge pl-meta-editable";
-  badge.title = "Cliquer pour modifier";
-  badge.textContent = makeBadgeText(field, initialValue, pitchShift);
-  badge.addEventListener("click", function() { editMeta(badge, slug, field, pitchShift); });
-  return badge;
-}
-// --- Fin BPM / Tonalité ---
+// ---
 
 function pauseAllExcept(except) {
   allAudioEls.forEach(function(a) {
@@ -227,15 +165,8 @@ function renderTrack(track, index) {
   title.textContent = track.title;
   info.appendChild(title);
 
-  // Badges BPM + tonalité — toujours affichés, cliquables pour saisir
-  // Pour la tonalité : affiche "original → transposé" si pitchShift défini
-  var savedMeta = getLocalMeta(track.slug);
-  var pitchShift = track.pitchShift || 0;
-  var meta = document.createElement("div");
-  meta.className = "pl-track-meta";
-  meta.appendChild(createMetaBadge(track.slug, "key", savedMeta.key || track.key || null, pitchShift));
-  meta.appendChild(createMetaBadge(track.slug, "bpm", savedMeta.bpm || track.bpm || null, 0));
-  info.appendChild(meta);
+  var metaRow = createMetaRow(track);
+  if (metaRow) info.appendChild(metaRow);
 
   var newLabel = track.dualVersion ? "Nouvelle version (IA)" : null;
   var newResult = createPlayer("audio/" + track.slug + ".mp3", newLabel);
