@@ -22,34 +22,41 @@ function stopAllPitch() {
   if (_pitchAudio) {
     _pitchAudio.pause();
     _pitchAudio._btn.textContent = _pitchAudio._label;
+    if (_pitchAudio._keyBadge) _pitchAudio._keyBadge.textContent = _pitchAudio._origKeyText;
     _pitchAudio = null;
   }
 }
 
-function createPitchBtn(track, index) {
+function createPitchBtn(track, index, keyBadge) {
   var label = pitchLabel(track.pitchShift);
   var shiftedSrc = "audio/" + track.slug + "-shifted.mp3";
+  var origKeyText = keyBadge ? keyBadge.textContent : null;
+  var shiftedKeyText = (keyBadge && track.key)
+    ? "\uD83C\uDFB5 " + (transposeKey(track.key, track.pitchShift) || track.key)
+    : null;
 
   var btn = document.createElement("button");
   btn.className = "pl-pitch-btn";
   btn.textContent = label;
 
   btn.addEventListener("click", function() {
-    // Si ce bouton est déjà actif → stop
     if (_pitchAudio && _pitchAudio._index === index) {
       stopAllPitch();
       return;
     }
 
-    // Stop tout le reste
     stopAllPitch();
     pauseAllExcept(null);
     if (sequenceActive) stopSequence();
+
+    if (keyBadge && shiftedKeyText) keyBadge.textContent = shiftedKeyText;
 
     var audio = new Audio(shiftedSrc);
     audio._btn = btn;
     audio._label = label;
     audio._index = index;
+    audio._keyBadge = keyBadge;
+    audio._origKeyText = origKeyText;
     _pitchAudio = audio;
 
     btn.textContent = "\u23F9 Stop";
@@ -58,6 +65,7 @@ function createPitchBtn(track, index) {
     audio.addEventListener("ended", function() {
       if (_pitchAudio === audio) {
         btn.textContent = label;
+        if (keyBadge) keyBadge.textContent = origKeyText;
         _pitchAudio = null;
       }
       var i = allAudioEls.indexOf(audio);
@@ -71,7 +79,19 @@ function createPitchBtn(track, index) {
 }
 // --- Fin pitch shift ---
 
-// --- Tonalité + BPM (affichage seul) ---
+// --- Tonalité + BPM ---
+var CHROMATIC = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+var ENHARMONIC = { Db:"C#", Eb:"D#", Fb:"E", Gb:"F#", Ab:"G#", Bb:"A#", Cb:"B" };
+
+function transposeKey(key, semitones) {
+  if (!key || !semitones) return null;
+  var minor = key.endsWith("m");
+  var root = minor ? key.slice(0, -1) : key;
+  var idx = CHROMATIC.indexOf(ENHARMONIC[root] || root);
+  if (idx === -1) return null;
+  return CHROMATIC[((idx + semitones) % 12 + 12) % 12] + (minor ? "m" : "");
+}
+
 function createMetaRow(track) {
   var row = document.createElement("div");
   row.className = "pl-track-meta";
@@ -153,6 +173,7 @@ function renderTrack(track, index) {
 
   var metaRow = createMetaRow(track);
   if (metaRow) info.appendChild(metaRow);
+  var keyBadge = metaRow ? metaRow.querySelector(".pl-meta-badge") : null;
 
   var newLabel = track.dualVersion ? "Nouvelle version (IA)" : null;
   var newResult = createPlayer("audio/" + track.slug + ".mp3", newLabel);
@@ -179,7 +200,7 @@ function renderTrack(track, index) {
   }
 
   if (track.pitchShift) {
-    info.appendChild(createPitchBtn(track, index));
+    info.appendChild(createPitchBtn(track, index, keyBadge));
   }
 
   card.appendChild(number);
