@@ -11,11 +11,11 @@ const TIERS = {
 };
 
 const PLAYLIST = [
-  { slug: "a-thousand-and-three-stars", title: "A Thousand And Three Stars", tier: "top5", dualVersion: true, oldFile: "a-thousand-and-three-stars-old.mp3", pitchShift: -2, bpm: null, key: null },
-  { slug: "too-bad", title: "Too Bad (Bad)", tier: "top5", dualVersion: true, oldFile: "too-bad-old.mp3", pitchShift: -2, bpm: null, key: null },
-  { slug: "everytime", title: "Everytime", tier: "top5", pitchShift: -3, bpm: null, key: null },
-  { slug: "dust-of-the-world", title: "Dust Of The World", tier: "top5", dualVersion: true, oldFile: "dust-of-the-world-old.mp3", pitchShift: -2, bpm: null, key: null },
-  { slug: "savage", title: "Savage", tier: "top5", bpm: null, key: null },
+  { slug: "a-thousand-and-three-stars", title: "A Thousand And Three Stars", tier: "top5", dualVersion: true, oldFile: "a-thousand-and-three-stars-old.mp3", pitchShift: -2, bpm: 129, key: "D" },
+  { slug: "too-bad", title: "Too Bad (Bad)", tier: "top5", dualVersion: true, oldFile: "too-bad-old.mp3", pitchShift: -2, bpm: 152, key: "E" },
+  { slug: "everytime", title: "Everytime", tier: "top5", pitchShift: -3, bpm: 99, key: "Dm" },
+  { slug: "dust-of-the-world", title: "Dust Of The World", tier: "top5", dualVersion: true, oldFile: "dust-of-the-world-old.mp3", pitchShift: -2, bpm: 108, key: "Bm" },
+  { slug: "savage", title: "Savage", tier: "top5", bpm: 144, key: "D#" },
   { slug: "breath", title: "Breath", tier: "quasi", dualVersion: true, oldFile: "breath-old.mp3", bpm: null, key: null },
   { slug: "the-ripper", title: "The Ripper (Trinaire / Triliaire)", tier: "quasi", dualVersion: true, oldFile: "the-ripper-old.mp3", bpm: null, key: null },
   { slug: "into-the-night", title: "Into The Night (Goodie)", tier: "bien", bpm: null, key: null },

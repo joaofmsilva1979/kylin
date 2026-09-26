@@ -9,9 +9,8 @@ let sequenceIndex = -1;
 const audioEls = [];
 const allAudioEls = [];
 
-// --- Pitch shift (Web Audio API — detune sans changer le tempo) ---
-const pitchState = {};
-const pitchBufferCache = new Map();
+// --- Pitch shift — lecture du fichier pré-rendu slug-shifted.mp3 ---
+var _pitchAudio = null; // l'élément <audio> de lecture shiftée en cours
 
 function pitchLabel(semitones) {
   var tones = Math.abs(semitones) / 2;
@@ -20,72 +19,54 @@ function pitchLabel(semitones) {
 }
 
 function stopAllPitch() {
-  Object.keys(pitchState).forEach(function(i) {
-    var state = pitchState[i];
-    delete pitchState[i];
-    try { state.source.stop(); } catch (e) {}
-    try { state.ctx.close(); } catch (e) {}
-    state.btn.textContent = pitchLabel(state.semitones);
-    state.btn.disabled = false;
-  });
-}
-
-async function togglePitch(src, slug, semitones, index, btn) {
-  if (pitchState[index]) {
-    var prev = pitchState[index];
-    delete pitchState[index];
-    try { prev.source.stop(); } catch (e) {}
-    try { prev.ctx.close(); } catch (e) {}
-    btn.textContent = pitchLabel(semitones);
-    return;
-  }
-
-  pauseAllExcept(null);
-  if (sequenceActive) stopSequence();
-
-  btn.textContent = "\u23F3\u2026";
-  btn.disabled = true;
-
-  try {
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-    var buffer = pitchBufferCache.get(slug);
-    if (!buffer) {
-      var ab = await fetch(src).then(function(r) { return r.arrayBuffer(); });
-      buffer = await ctx.decodeAudioData(ab);
-      pitchBufferCache.set(slug, buffer);
-    }
-
-    var source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.detune.value = semitones * 100; // cents : -200 = -1 ton, -300 = -1,5 ton
-    source.connect(ctx.destination);
-    source.start();
-
-    pitchState[index] = { source: source, ctx: ctx, btn: btn, semitones: semitones };
-    btn.textContent = "\u23F9 Stop";
-    btn.disabled = false;
-
-    source.addEventListener("ended", function() {
-      if (!pitchState[index]) return;
-      delete pitchState[index];
-      try { ctx.close(); } catch (e) {}
-      btn.textContent = pitchLabel(semitones);
-    });
-  } catch (e) {
-    console.error("Pitch error:", e);
-    btn.textContent = pitchLabel(semitones);
-    btn.disabled = false;
+  if (_pitchAudio) {
+    _pitchAudio.pause();
+    _pitchAudio._btn.textContent = _pitchAudio._label;
+    _pitchAudio = null;
   }
 }
 
 function createPitchBtn(track, index) {
+  var label = pitchLabel(track.pitchShift);
+  var shiftedSrc = "audio/" + track.slug + "-shifted.mp3";
+
   var btn = document.createElement("button");
   btn.className = "pl-pitch-btn";
-  btn.textContent = pitchLabel(track.pitchShift);
+  btn.textContent = label;
+
   btn.addEventListener("click", function() {
-    togglePitch("audio/" + track.slug + ".mp3", track.slug, track.pitchShift, index, btn);
+    // Si ce bouton est déjà actif → stop
+    if (_pitchAudio && _pitchAudio._index === index) {
+      stopAllPitch();
+      return;
+    }
+
+    // Stop tout le reste
+    stopAllPitch();
+    pauseAllExcept(null);
+    if (sequenceActive) stopSequence();
+
+    var audio = new Audio(shiftedSrc);
+    audio._btn = btn;
+    audio._label = label;
+    audio._index = index;
+    _pitchAudio = audio;
+
+    btn.textContent = "\u23F9 Stop";
+    allAudioEls.push(audio);
+
+    audio.addEventListener("ended", function() {
+      if (_pitchAudio === audio) {
+        btn.textContent = label;
+        _pitchAudio = null;
+      }
+      var i = allAudioEls.indexOf(audio);
+      if (i !== -1) allAudioEls.splice(i, 1);
+    });
+
+    audio.play();
   });
+
   return btn;
 }
 // --- Fin pitch shift ---
